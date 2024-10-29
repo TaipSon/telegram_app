@@ -34,7 +34,7 @@ function showMessage(text, isUserChoice = false, isInactiveChoice = false) {
     }
 
     chatBox.appendChild(message);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.scrollTop = chatBox.scrollHeight; // Прокрутка вниз
 
     // Сохраняем сообщение в истории
     gameHistory.push({ text, isUserChoice, isInactiveChoice });
@@ -42,28 +42,26 @@ function showMessage(text, isUserChoice = false, isInactiveChoice = false) {
 }
 
 function clearOptions() {
-    actionsBox.innerHTML = '';
+    actionsBox.innerHTML = ''; // Очищаем текущие кнопки
 }
 
 function showOptions(option1Text, option2Text, option1Action, option2Action) {
-    clearOptions();
+    clearOptions(); // Очищаем предыдущие кнопки
 
     const option1Button = document.createElement("button");
     option1Button.innerText = option1Text;
     option1Button.onclick = () => {
         showMessage(option1Text, true); // Показ выбранного действия
-        showMessage(option2Text, false, true); // Показ невыбранного действия в сером цвете
-        clearOptions();
-        option1Action();
+        clearOptions(); // Убираем кнопки
+        option1Action(); // Выполняем действие
     };
 
     const option2Button = document.createElement("button");
     option2Button.innerText = option2Text;
     option2Button.onclick = () => {
         showMessage(option2Text, true); // Показ выбранного действия
-        showMessage(option1Text, false, true); // Показ невыбранного действия в сером цвете
-        clearOptions();
-        option2Action();
+        clearOptions(); // Убираем кнопки
+        option2Action(); // Выполняем действие
     };
 
     actionsBox.appendChild(option1Button);
@@ -83,41 +81,14 @@ function startGame() {
             showMessage("Элисон: Моя миссия — помочь тебе разобраться с тем, что происходит...");
             showOptions("Продолжить", "Сменить тему", () => {
                 showMessage("Элисон: Хорошо, у меня есть важное сообщение...");
-                showMessage("Элисон: Мне нужно найти ключ к своей памяти. Ты готов помочь мне?");
                 showOptions(
-                    "Согласиться помочь",
-                    "Спросить о ключе",
+                    "Узнать больше о месте",
+                    "Спросить о её прошлом",
                     () => {
-                        showMessage("Элисон: Спасибо! Я чувствую, что это связано с тем местом, где я была...");
-                        showOptions("Узнать больше о месте", "Спросить о её прошлом", () => {
-                            showMessage("Элисон: Я не помню много, но чувствую, что это было что-то важное.");
-                            showOptions("Постараться вспомнить", "Перейти к действиям", () => {
-                                showMessage("Элисон: Давай не будем зацикливаться. Нам нужно действовать.");
-                                showOptions("Исследовать окрестности", "Собрать информацию", () => {
-                                    showMessage("Элисон: Хорошая идея! Давай посмотрим, что можно найти.");
-                                    showOptions("Проверить старый дом", "Пойти в лес", () => {
-                                        showMessage("Элисон: Давай проверим дом, возможно, там мы найдём подсказки.");
-                                    }, () => {
-                                        showMessage("Элисон: Лес может быть опасным, но это может быть единственным вариантом.");
-                                    });
-                                }, () => {
-                                    showMessage("Элисон: Знания могут помочь, давай соберем информацию.");
-                                });
-                            }, () => {
-                                showMessage("Элисон: Возможно, стоит просто продолжить и искать дальше.");
-                            });
-                        }, () => {
-                            showMessage("Элисон: Я не уверена, что это хорошая идея...");
-                        });
+                        showMessage("Элисон: Я не помню много, но чувствую, что это было что-то важное.");
                     },
                     () => {
-                        showMessage("Элисон: Понимаю, это может быть опасно. Но мне нужна твоя помощь.");
-                        showOptions("Согласиться помочь", "Сказать, что это не моя проблема", () => {
-                            showMessage("Элисон: Спасибо! Я чувствую, что это важно.");
-                            showMessage("Элисон: Давай, я верю в тебя!");
-                        }, () => {
-                            showMessage("Элисон: Я понимаю, но мне очень нужна помощь...");
-                        });
+                        showMessage("Элисон: Я не уверена, что это хорошая идея...");
                     }
                 );
             }, () => {
