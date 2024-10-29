@@ -34,7 +34,7 @@ function showMessage(text, isUserChoice = false, isInactiveChoice = false) {
     }
 
     chatBox.appendChild(message);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.scrollTop = chatBox.scrollHeight; // Прокрутка вниз
 
     // Сохраняем сообщение в истории
     gameHistory.push({ text, isUserChoice, isInactiveChoice });
@@ -42,28 +42,26 @@ function showMessage(text, isUserChoice = false, isInactiveChoice = false) {
 }
 
 function clearOptions() {
-    actionsBox.innerHTML = '';
+    actionsBox.innerHTML = ''; // Очищаем текущие кнопки
 }
 
 function showOptions(option1Text, option2Text, option1Action, option2Action) {
-    clearOptions();
+    clearOptions(); // Очищаем предыдущие кнопки
 
     const option1Button = document.createElement("button");
     option1Button.innerText = option1Text;
     option1Button.onclick = () => {
         showMessage(option1Text, true); // Показ выбранного действия
-        showMessage(option2Text, false, true); // Показ невыбранного действия в сером цвете
-        clearOptions();
-        option1Action();
+        clearOptions(); // Убираем кнопки
+        option1Action(); // Выполняем действие
     };
 
     const option2Button = document.createElement("button");
     option2Button.innerText = option2Text;
     option2Button.onclick = () => {
         showMessage(option2Text, true); // Показ выбранного действия
-        showMessage(option1Text, false, true); // Показ невыбранного действия в сером цвете
-        clearOptions();
-        option2Action();
+        clearOptions(); // Убираем кнопки
+        option2Action(); // Выполняем действие
     };
 
     actionsBox.appendChild(option1Button);
@@ -72,35 +70,40 @@ function showOptions(option1Text, option2Text, option1Action, option2Action) {
 
 // Функция для начала игры
 function startGame() {
-    const startGameButton = document.createElement("button");
-    startGameButton.innerText = "Начать игру";
-    startGameButton.onclick = () => {
-        startGameButton.remove();
-        isGameStarted = true; // Игра начата
-        showMessage("Элисон: Привет! Ты готов начать наше путешествие?");
-        showOptions(
-            "Спросить о её миссии",
-            "Успокоить её",
-            () => {
-                showMessage("Элисон: Моя миссия — помочь тебе разобраться с тем, что происходит...");
-                showOptions("Продолжить", "Сменить тему", () => {
-                    showMessage("Элисон: Хорошо, у меня есть важное сообщение...");
-                }, () => {
-                    showMessage("Элисон: Конечно, можем поговорить о чём-то другом.");
-                });
-            },
-            () => {
-                showMessage("Элисон: Спасибо, мне становится спокойнее, когда ты рядом.");
-                showOptions("Спросить о плане", "Пожелать удачи", () => {
-                    showMessage("Элисон: У меня есть план, как выбраться отсюда.");
-                }, () => {
-                    showMessage("Элисон: Спасибо, я надеюсь, что у нас все получится.");
-                });
-            }
-        );
-    };
+    if (isGameStarted) return; // Проверка, начата ли игра
 
-    actionsBox.appendChild(startGameButton);
+    isGameStarted = true; // Игра начата
+    showMessage("Элисон: Привет! Ты готов начать наше путешествие?");
+    showOptions(
+        "Спросить о её миссии",
+        "Успокоить её",
+        () => {
+            showMessage("Элисон: Моя миссия — помочь тебе разобраться с тем, что происходит...");
+            showOptions("Продолжить", "Сменить тему", () => {
+                showMessage("Элисон: Хорошо, у меня есть важное сообщение...");
+                showOptions(
+                    "Узнать больше о месте",
+                    "Спросить о её прошлом",
+                    () => {
+                        showMessage("Элисон: Я не помню много, но чувствую, что это было что-то важное.");
+                    },
+                    () => {
+                        showMessage("Элисон: Я не уверена, что это хорошая идея...");
+                    }
+                );
+            }, () => {
+                showMessage("Элисон: Хорошо, о чем ты хочешь поговорить?");
+            });
+        },
+        () => {
+            showMessage("Элисон: Спасибо, мне становится спокойнее, когда ты рядом.");
+            showOptions("Спросить о плане", "Пожелать удачи", () => {
+                showMessage("Элисон: У меня есть план, как выбраться отсюда.");
+            }, () => {
+                showMessage("Элисон: Спасибо, я надеюсь, что у нас все получится.");
+            });
+        }
+    );
 }
 
 // Функция для сброса игры
@@ -110,13 +113,28 @@ function resetGame() {
     chatBox.innerHTML = ''; // Очищаем чат
     actionsBox.innerHTML = ''; // Очищаем кнопки действий
     isGameStarted = false; // Сбрасываем флаг начала игры
-    startGame(); // Показать кнопку "Начать игру"
+    showStartButton(); // Показать кнопку "Начать игру"
+}
+
+// Функция для отображения кнопки "Начать игру"
+function showStartButton() {
+    clearOptions(); // Очищаем текущие кнопки
+    const startButton = document.createElement("button");
+    startButton.innerText = "Начать игру";
+    startButton.onclick = () => {
+        startGame();
+        actionsBox.removeChild(startButton); // Убираем кнопку после начала игры
+    };
+    actionsBox.appendChild(startButton);
 }
 
 // Кнопка сброса
 const resetButton = document.createElement("button");
 resetButton.innerText = "Начать игру заново";
 resetButton.onclick = resetGame;
+resetButton.style.position = "absolute"; // Делаем кнопку абсолютной
+resetButton.style.top = "10px"; // Положение кнопки сверху
+resetButton.style.right = "10px"; // Положение кнопки справа
 actionsBox.appendChild(resetButton);
 
 // Загрузка сохранённой игры при старте
@@ -124,6 +142,6 @@ loadGame();
 
 // Проверка, начата ли игра, и отображение кнопки
 if (!isGameStarted) {
-    startGame(); // Показываем кнопку только если игра не начата
+    showStartButton(); // Показываем кнопку "Начать игру" только если игра не начата
 }
 
