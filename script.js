@@ -103,6 +103,22 @@ function startGame() {
     actionsBox.appendChild(startGameButton);
 }
 
+// Функция для сброса игры
+function resetGame() {
+    localStorage.removeItem("gameHistory"); // Удаляем историю из локального хранилища
+    gameHistory = []; // Очищаем массив истории
+    chatBox.innerHTML = ''; // Очищаем чат
+    actionsBox.innerHTML = ''; // Очищаем кнопки действий
+    isGameStarted = false; // Сбрасываем флаг начала игры
+    startGame(); // Показать кнопку "Начать игру"
+}
+
+// Кнопка сброса
+const resetButton = document.createElement("button");
+resetButton.innerText = "Начать игру заново";
+resetButton.onclick = resetGame;
+actionsBox.appendChild(resetButton);
+
 // Загрузка сохранённой игры при старте
 loadGame();
 
