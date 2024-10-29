@@ -8,8 +8,14 @@ function showMessage(text, isUserChoice = false, isInactiveChoice = false) {
     if (isUserChoice) {
         message.style.fontWeight = "bold";
         message.style.color = "#007bff"; // Синий цвет для выбранного варианта
+        message.style.border = "1px solid #007bff"; // Рамка синего цвета для выбранного варианта
+        message.style.padding = "5px";
+        message.style.borderRadius = "8px";
     } else if (isInactiveChoice) {
         message.style.color = "#666"; // Серый цвет для невыбранного варианта
+        message.style.border = "1px solid #666"; // Рамка серого цвета для невыбранного варианта
+        message.style.padding = "5px";
+        message.style.borderRadius = "8px";
     }
 
     chatBox.appendChild(message);
@@ -75,3 +81,4 @@ startGameButton.onclick = () => {
 };
 
 actionsBox.appendChild(startGameButton);
+
