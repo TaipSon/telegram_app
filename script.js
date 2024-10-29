@@ -2,6 +2,7 @@ const chatBox = document.getElementById("chat-box");
 const actionsBox = document.getElementById("actions-box");
 
 let gameHistory = []; // Массив для хранения истории игры
+let isGameStarted = false; // Флаг, указывающий, началась ли игра
 
 function saveGame() {
     localStorage.setItem("gameHistory", JSON.stringify(gameHistory)); // Сохраняем историю в локальное хранилище
@@ -69,35 +70,43 @@ function showOptions(option1Text, option2Text, option1Action, option2Action) {
     actionsBox.appendChild(option2Button);
 }
 
+// Функция для начала игры
+function startGame() {
+    const startGameButton = document.createElement("button");
+    startGameButton.innerText = "Начать игру";
+    startGameButton.onclick = () => {
+        startGameButton.remove();
+        isGameStarted = true; // Игра начата
+        showMessage("Элисон: Привет! Ты готов начать наше путешествие?");
+        showOptions(
+            "Спросить о её миссии",
+            "Успокоить её",
+            () => {
+                showMessage("Элисон: Моя миссия — помочь тебе разобраться с тем, что происходит...");
+                showOptions("Продолжить", "Сменить тему", () => {
+                    showMessage("Элисон: Хорошо, у меня есть важное сообщение...");
+                }, () => {
+                    showMessage("Элисон: Конечно, можем поговорить о чём-то другом.");
+                });
+            },
+            () => {
+                showMessage("Элисон: Спасибо, мне становится спокойнее, когда ты рядом.");
+                showOptions("Спросить о плане", "Пожелать удачи", () => {
+                    showMessage("Элисон: У меня есть план, как выбраться отсюда.");
+                }, () => {
+                    showMessage("Элисон: Спасибо, я надеюсь, что у нас все получится.");
+                });
+            }
+        );
+    };
+
+    actionsBox.appendChild(startGameButton);
+}
+
 // Загрузка сохранённой игры при старте
 loadGame();
 
-// Стартовое сообщение и кнопка
-const startGameButton = document.createElement("button");
-startGameButton.innerText = "Начать игру";
-startGameButton.onclick = () => {
-    startGameButton.remove();
-    showMessage("Элисон: Привет! Ты готов начать наше путешествие?");
-    showOptions(
-        "Спросить о её миссии",
-        "Успокоить её",
-        () => {
-            showMessage("Элисон: Моя миссия — помочь тебе разобраться с тем, что происходит...");
-            showOptions("Продолжить", "Сменить тему", () => {
-                showMessage("Элисон: Хорошо, у меня есть важное сообщение...");
-            }, () => {
-                showMessage("Элисон: Конечно, можем поговорить о чём-то другом.");
-            });
-        },
-        () => {
-            showMessage("Элисон: Спасибо, мне становится спокойнее, когда ты рядом.");
-            showOptions("Спросить о плане", "Пожелать удачи", () => {
-                showMessage("Элисон: У меня есть план, как выбраться отсюда.");
-            }, () => {
-                showMessage("Элисон: Спасибо, я надеюсь, что у нас все получится.");
-            });
-        }
-    );
-};
-
-actionsBox.appendChild(startGameButton);
+// Проверка, начата ли игра, и отображение кнопки
+if (!isGameStarted) {
+    startGame(); // Показываем кнопку только если игра не начата
+}
