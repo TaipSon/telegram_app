@@ -142,7 +142,19 @@ function resetGame() {
     chatBox.innerHTML = ''; // Очищаем чат
     actionsBox.innerHTML = ''; // Очищаем кнопки действий
     isGameStarted = false; // Сбрасываем флаг начала игры
-    startGame(); // Показать кнопку "Начать игру"
+    showStartButton(); // Показать кнопку "Начать игру"
+}
+
+// Функция для отображения кнопки "Начать игру"
+function showStartButton() {
+    clearOptions(); // Очищаем текущие кнопки
+    const startButton = document.createElement("button");
+    startButton.innerText = "Начать игру";
+    startButton.onclick = () => {
+        startGame();
+        actionsBox.removeChild(startButton); // Убираем кнопку после начала игры
+    };
+    actionsBox.appendChild(startButton);
 }
 
 // Кнопка сброса
@@ -159,5 +171,5 @@ loadGame();
 
 // Проверка, начата ли игра, и отображение кнопки
 if (!isGameStarted) {
-    startGame(); // Показываем кнопку только если игра не начата
+    showStartButton(); // Показываем кнопку "Начать игру" только если игра не начата
 }
