@@ -1,6 +1,20 @@
 const chatBox = document.getElementById("chat-box");
 const actionsBox = document.getElementById("actions-box");
 
+let gameHistory = []; // Массив для хранения истории игры
+
+function saveGame() {
+    localStorage.setItem("gameHistory", JSON.stringify(gameHistory)); // Сохраняем историю в локальное хранилище
+}
+
+function loadGame() {
+    const savedHistory = localStorage.getItem("gameHistory");
+    if (savedHistory) {
+        gameHistory = JSON.parse(savedHistory); // Загружаем сохранённую историю
+        gameHistory.forEach(entry => showMessage(entry.text, entry.isUserChoice, entry.isInactiveChoice));
+    }
+}
+
 function showMessage(text, isUserChoice = false, isInactiveChoice = false) {
     const message = document.createElement("p");
     message.innerText = text;
@@ -20,6 +34,10 @@ function showMessage(text, isUserChoice = false, isInactiveChoice = false) {
 
     chatBox.appendChild(message);
     chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Сохраняем сообщение в истории
+    gameHistory.push({ text, isUserChoice, isInactiveChoice });
+    saveGame();
 }
 
 function clearOptions() {
@@ -51,8 +69,10 @@ function showOptions(option1Text, option2Text, option1Action, option2Action) {
     actionsBox.appendChild(option2Button);
 }
 
+// Загрузка сохранённой игры при старте
+loadGame();
+
 // Стартовое сообщение и кнопка
-showMessage("Элисон: Привет... ты меня слышишь?");
 const startGameButton = document.createElement("button");
 startGameButton.innerText = "Начать игру";
 startGameButton.onclick = () => {
@@ -81,4 +101,3 @@ startGameButton.onclick = () => {
 };
 
 actionsBox.appendChild(startGameButton);
-
