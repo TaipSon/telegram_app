@@ -3,17 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Game</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Interactive Game</title>
+    <style>
+        /* Стили для чата и кнопок */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #chat-box {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            height: 60vh;
+            overflow-y: scroll;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        #actions-box {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <div id="game-container">
-        <div id="chat-box"></div>
-        <div id="choices">
-            <button onclick="chooseOption(1)">Выбор 1</button>
-            <button onclick="chooseOption(2)">Выбор 2</button>
-        </div>
-    </div>
+
+    <!-- Блок для сообщений чата -->
+    <div id="chat-box"></div>
+
+    <!-- Блок для кнопок с действиями -->
+    <div id="actions-box"></div>
+
+    <!-- Подключаем скрипт -->
     <script src="script.js"></script>
 </body>
 </html>
