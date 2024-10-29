@@ -1,9 +1,13 @@
 const chatBox = document.getElementById("chat-box");
 const actionsBox = document.getElementById("actions-box");
 
-function showMessage(text) {
+function showMessage(text, isUserChoice = false) {
     const message = document.createElement("p");
     message.innerText = text;
+    if (isUserChoice) {
+        message.style.fontWeight = "bold";
+        message.style.color = "#007bff"; // Цвет выбранного действия
+    }
     chatBox.appendChild(message);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
@@ -18,15 +22,25 @@ function showOptions(option1Text, option2Text, option1Action, option2Action) {
     const option1Button = document.createElement("button");
     option1Button.innerText = option1Text;
     option1Button.onclick = () => {
-        option1Action();
+        showMessage(option1Text, true); // Показ выбранного действия
+        option1Button.style.backgroundColor = "#007bff";
+        option1Button.style.color = "#fff";
+        option2Button.style.backgroundColor = "#ccc";
+        option2Button.style.color = "#666";
         clearOptions();
+        option1Action();
     };
 
     const option2Button = document.createElement("button");
     option2Button.innerText = option2Text;
     option2Button.onclick = () => {
-        option2Action();
+        showMessage(option2Text, true); // Показ выбранного действия
+        option2Button.style.backgroundColor = "#007bff";
+        option2Button.style.color = "#fff";
+        option1Button.style.backgroundColor = "#ccc";
+        option1Button.style.color = "#666";
         clearOptions();
+        option2Action();
     };
 
     actionsBox.appendChild(option1Button);
@@ -63,5 +77,3 @@ startGameButton.onclick = () => {
 };
 
 actionsBox.appendChild(startGameButton);
-
-
