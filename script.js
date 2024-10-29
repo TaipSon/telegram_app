@@ -1,13 +1,17 @@
 const chatBox = document.getElementById("chat-box");
 const actionsBox = document.getElementById("actions-box");
 
-function showMessage(text, isUserChoice = false) {
+function showMessage(text, isUserChoice = false, isInactiveChoice = false) {
     const message = document.createElement("p");
     message.innerText = text;
+
     if (isUserChoice) {
         message.style.fontWeight = "bold";
-        message.style.color = "#007bff"; // Цвет выбранного действия
+        message.style.color = "#007bff"; // Синий цвет для выбранного варианта
+    } else if (isInactiveChoice) {
+        message.style.color = "#666"; // Серый цвет для невыбранного варианта
     }
+
     chatBox.appendChild(message);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
@@ -23,10 +27,7 @@ function showOptions(option1Text, option2Text, option1Action, option2Action) {
     option1Button.innerText = option1Text;
     option1Button.onclick = () => {
         showMessage(option1Text, true); // Показ выбранного действия
-        option1Button.style.backgroundColor = "#007bff";
-        option1Button.style.color = "#fff";
-        option2Button.style.backgroundColor = "#ccc";
-        option2Button.style.color = "#666";
+        showMessage(option2Text, false, true); // Показ невыбранного действия в сером цвете
         clearOptions();
         option1Action();
     };
@@ -35,10 +36,7 @@ function showOptions(option1Text, option2Text, option1Action, option2Action) {
     option2Button.innerText = option2Text;
     option2Button.onclick = () => {
         showMessage(option2Text, true); // Показ выбранного действия
-        option2Button.style.backgroundColor = "#007bff";
-        option2Button.style.color = "#fff";
-        option1Button.style.backgroundColor = "#ccc";
-        option1Button.style.color = "#666";
+        showMessage(option1Text, false, true); // Показ невыбранного действия в сером цвете
         clearOptions();
         option2Action();
     };
