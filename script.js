@@ -1,52 +1,60 @@
 const chatBox = document.getElementById("chat-box");
+const actionsBox = document.getElementById("actions-box"); // Блок для кнопок действий
 
 function showMessage(text) {
     const message = document.createElement("p");
     message.innerText = text;
     chatBox.appendChild(message);
-    chatBox.scrollTop = chatBox.scrollHeight; // Прокрутка вниз
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function chooseOption(option) {
-    if (option === 1) {
-        showMessage("Элисон: Вы выбрали вариант 1. Я рада, что ты здесь! Что ты хочешь узнать?");
-        showOptions(); // Показываем новые варианты
-    } else if (option === 2) {
-        showMessage("Элисон: Вы выбрали вариант 2. Я немного волнуюсь... Ты готов помочь мне?");
-        showOptions(); // Показываем новые варианты
-    }
+function clearOptions() {
+    actionsBox.innerHTML = ''; // Очищаем блок действий перед добавлением новых вариантов
 }
 
-// Функция для показа вариантов выбора
-function showOptions() {
+function showOptions(option1Text, option2Text, option1Action, option2Action) {
+    clearOptions();
+
     const option1Button = document.createElement("button");
-    option1Button.innerText = "Спросить о её миссии";
-    option1Button.onclick = () => {
-        showMessage("Элисон: Моя миссия — помочь тебе разобраться с тем, что происходит...");
-        // Здесь можно продолжить сюжет
-    };
+    option1Button.innerText = option1Text;
+    option1Button.onclick = option1Action;
 
     const option2Button = document.createElement("button");
-    option2Button.innerText = "Успокоить её";
-    option2Button.onclick = () => {
-        showMessage("Элисон: Спасибо, мне становится спокойнее, когда ты рядом.");
-        // Здесь можно продолжить сюжет
-    };
+    option2Button.innerText = option2Text;
+    option2Button.onclick = option2Action;
 
-    chatBox.appendChild(option1Button);
-    chatBox.appendChild(option2Button);
+    actionsBox.appendChild(option1Button);
+    actionsBox.appendChild(option2Button);
 }
 
-// Первое сообщение
+// Первое сообщение и кнопка для начала игры
 showMessage("Элисон: Привет... ты меня слышишь?");
-
-// Пример вызова выбора
 const startGameButton = document.createElement("button");
 startGameButton.innerText = "Начать игру";
 startGameButton.onclick = () => {
+    startGameButton.remove(); // Удаляем кнопку "Начать игру"
     showMessage("Элисон: Привет! Ты готов начать наше путешествие?");
-    showMessage("Выберите вариант: ");
-    chooseOption(1); // Или chooseOption(2) для другого ответа
+    showOptions(
+        "Спросить о её миссии",
+        "Успокоить её",
+        () => {
+            showMessage("Элисон: Моя миссия — помочь тебе разобраться с тем, что происходит...");
+            showOptions("Продолжить", "Сменить тему", () => {
+                showMessage("Элисон: Хорошо, у меня есть важное сообщение...");
+            }, () => {
+                showMessage("Элисон: Конечно, можем поговорить о чём-то другом.");
+            });
+        },
+        () => {
+            showMessage("Элисон: Спасибо, мне становится спокойнее, когда ты рядом.");
+            showOptions("Спросить о плане", "Пожелать удачи", () => {
+                showMessage("Элисон: У меня есть план, как выбраться отсюда.");
+            }, () => {
+                showMessage("Элисон: Спасибо, я надеюсь, что у нас все получится.");
+            });
+        }
+    );
 };
 
-chatBox.appendChild(startGameButton);
+actionsBox.appendChild(startGameButton);
+
