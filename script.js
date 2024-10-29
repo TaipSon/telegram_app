@@ -1,5 +1,5 @@
 const chatBox = document.getElementById("chat-box");
-const actionsBox = document.getElementById("actions-box"); // Блок для кнопок действий
+const actionsBox = document.getElementById("actions-box");
 
 function showMessage(text) {
     const message = document.createElement("p");
@@ -9,7 +9,7 @@ function showMessage(text) {
 }
 
 function clearOptions() {
-    actionsBox.innerHTML = ''; // Очищаем блок действий перед добавлением новых вариантов
+    actionsBox.innerHTML = '';
 }
 
 function showOptions(option1Text, option2Text, option1Action, option2Action) {
@@ -17,22 +17,28 @@ function showOptions(option1Text, option2Text, option1Action, option2Action) {
 
     const option1Button = document.createElement("button");
     option1Button.innerText = option1Text;
-    option1Button.onclick = option1Action;
+    option1Button.onclick = () => {
+        option1Action();
+        clearOptions();
+    };
 
     const option2Button = document.createElement("button");
     option2Button.innerText = option2Text;
-    option2Button.onclick = option2Action;
+    option2Button.onclick = () => {
+        option2Action();
+        clearOptions();
+    };
 
     actionsBox.appendChild(option1Button);
     actionsBox.appendChild(option2Button);
 }
 
-// Первое сообщение и кнопка для начала игры
+// Стартовое сообщение и кнопка
 showMessage("Элисон: Привет... ты меня слышишь?");
 const startGameButton = document.createElement("button");
 startGameButton.innerText = "Начать игру";
 startGameButton.onclick = () => {
-    startGameButton.remove(); // Удаляем кнопку "Начать игру"
+    startGameButton.remove();
     showMessage("Элисон: Привет! Ты готов начать наше путешествие?");
     showOptions(
         "Спросить о её миссии",
@@ -57,4 +63,5 @@ startGameButton.onclick = () => {
 };
 
 actionsBox.appendChild(startGameButton);
+
 
